@@ -10,22 +10,26 @@ class GameRenderer {
         this.bgImages = {
             scenicDay: new Image(),
             combatNight: new Image(),
-            inventoryArt: new Image()
+            inventoryArt: new Image(),
+            heroFace: new Image()
         };
 
         this.bgImages.scenicDay.src = 'assets/0x0.webp';
         this.bgImages.combatNight.src = 'assets/images.jpg';
         this.bgImages.inventoryArt.src = 'assets/shopping.webp';
+        this.bgImages.heroFace.src = 'assets/hero_face.jpg';
 
         this.imagesLoaded = {
             scenicDay: false,
             combatNight: false,
-            inventoryArt: false
+            inventoryArt: false,
+            heroFace: false
         };
 
         this.bgImages.scenicDay.onload = () => { this.imagesLoaded.scenicDay = true; };
         this.bgImages.combatNight.onload = () => { this.imagesLoaded.combatNight = true; };
         this.bgImages.inventoryArt.onload = () => { this.imagesLoaded.inventoryArt = true; };
+        this.bgImages.heroFace.onload = () => { this.imagesLoaded.heroFace = true; };
     }
 
     render(combat, state, dt) {
@@ -234,6 +238,58 @@ class GameRenderer {
         // 6. Weapon & Attack Animation
         this.drawHeroWeapon(ctx, eq.weapon, pc, bob, p.vip);
 
+        // 7. Speech Bubble ("Nima gap botam!")
+        if (combat && combat.speechBubbleTimer > 0) {
+            this.drawSpeechBubble(ctx, combat.speechBubbleText || "Nima gap botam! 😎", 0, -78 + bob);
+        }
+
+        ctx.restore();
+    }
+
+    drawSpeechBubble(ctx, text, x, y) {
+        ctx.save();
+        ctx.font = 'bold 12px Montserrat, sans-serif';
+        const metrics = ctx.measureText(text);
+        const textW = metrics.width;
+        const padX = 14;
+        const bubbleW = textW + padX * 2;
+        const bubbleH = 26;
+        const bx = x - bubbleW / 2;
+        const by = y - bubbleH;
+
+        // Background box
+        ctx.fillStyle = 'rgba(13, 17, 23, 0.95)';
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 1.8;
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 8;
+
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(bx, by, bubbleW, bubbleH, 8);
+        } else {
+            ctx.rect(bx, by, bubbleW, bubbleH);
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        // Speech bubble triangle tail
+        ctx.beginPath();
+        ctx.moveTo(x - 5, by + bubbleH);
+        ctx.lineTo(x, by + bubbleH + 6);
+        ctx.lineTo(x + 5, by + bubbleH);
+        ctx.closePath();
+        ctx.fillStyle = '#ffd700';
+        ctx.fill();
+
+        // Text
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 3;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, x, by + bubbleH / 2);
+
         ctx.restore();
     }
 
@@ -347,39 +403,48 @@ class GameRenderer {
         ctx.save();
         ctx.translate(0, -46 + bob);
 
-        // Face & Skin (Anime styled)
-        ctx.fillStyle = '#ffe0b2';
-        ctx.beginPath();
-        ctx.arc(0, 0, 9, 0, Math.PI * 2);
-        ctx.fill();
+        if (this.imagesLoaded.heroFace) {
+            // Real User's Face from hero_face.jpg
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(0, 0, 11, 0, Math.PI * 2);
+            ctx.clip();
+            // Source is 768x1024, face box centered around x:160, y:120, w:448, h:480
+            ctx.drawImage(this.bgImages.heroFace, 160, 120, 448, 480, -11, -11, 22, 22);
+            ctx.restore();
 
-        // Eye (Bright Anime Eye)
-        ctx.fillStyle = isVip ? '#ffd700' : '#00e5ff';
-        ctx.beginPath();
-        ctx.arc(4, -1, 2.2, 0, Math.PI * 2);
-        ctx.fill();
+            // Face contour border
+            ctx.strokeStyle = isVip ? '#ffd700' : 'rgba(255,255,255,0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(0, 0, 11, 0, Math.PI * 2);
+            ctx.stroke();
+        } else {
+            // Fallback Face & Skin
+            ctx.fillStyle = '#ffe0b2';
+            ctx.beginPath();
+            ctx.arc(0, 0, 9, 0, Math.PI * 2);
+            ctx.fill();
 
-        // Silver/White Anime Hair (like Arlecchino / Fischl / Genshin hero)
-        ctx.fillStyle = '#eceff1';
-        // Back bangs
-        ctx.beginPath();
-        ctx.moveTo(-10, 2);
-        ctx.quadraticCurveTo(-15, -12, 0, -12);
-        ctx.quadraticCurveTo(12, -12, 10, 4);
-        ctx.lineTo(6, -2);
-        ctx.lineTo(2, 6);
-        ctx.lineTo(-2, -3);
-        ctx.lineTo(-6, 4);
-        ctx.closePath();
-        ctx.fill();
+            // Eye (Bright Anime Eye)
+            ctx.fillStyle = isVip ? '#ffd700' : '#00e5ff';
+            ctx.beginPath();
+            ctx.arc(4, -1, 2.2, 0, Math.PI * 2);
+            ctx.fill();
 
-        // Ponytail / hair strands swaying
-        const hairWave = Math.sin(this.animTime * 6) * 4;
-        ctx.beginPath();
-        ctx.moveTo(-8, -6);
-        ctx.quadraticCurveTo(-18 + hairWave, 0, -22 + hairWave, 10);
-        ctx.quadraticCurveTo(-14, 5, -8, -2);
-        ctx.fill();
+            // Hair
+            ctx.fillStyle = '#eceff1';
+            ctx.beginPath();
+            ctx.moveTo(-10, 2);
+            ctx.quadraticCurveTo(-15, -12, 0, -12);
+            ctx.quadraticCurveTo(12, -12, 10, 4);
+            ctx.lineTo(6, -2);
+            ctx.lineTo(2, 6);
+            ctx.lineTo(-2, -3);
+            ctx.lineTo(-6, 4);
+            ctx.closePath();
+            ctx.fill();
+        }
 
         // Helmet / Crown
         if (helmId === 'h_diyorbek_crown' || isVip) {

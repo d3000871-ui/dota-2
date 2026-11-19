@@ -18,3 +18,4 @@ if %errorlevel% equ 0 (
     echo Iltimos, https://github.com/new manziliga kiring va "dota-2d" nomli repo yarating, keyin yana shu faylni ishga tushiring!
 )
 pause
+

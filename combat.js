@@ -186,6 +186,8 @@ class CombatEngine {
         this.spawnTimer = 0;
         this.worldDistance = 0;
         this.bossActive = false;
+        this.speechBubbleTimer = 8;
+        this.speechBubbleText = "Nima gap botam! 😎";
 
         // Player Combat State
         this.playerCombat = {
@@ -222,6 +224,11 @@ class CombatEngine {
         this.playerCombat.y = 430;
         this.playerCombat.vx = 0;
         this.playerCombat.vy = 0;
+    }
+
+    showSpeech(text, duration = 4) {
+        this.speechBubbleText = text;
+        this.speechBubbleTimer = duration;
     }
 
     addScreenShake(amount = 8) {
@@ -328,6 +335,7 @@ class CombatEngine {
         // Decrement cooldowns
         if (pc.attackCooldown > 0) pc.attackCooldown -= dt;
         if (pc.dashCooldown > 0) pc.dashCooldown -= dt;
+        if (this.speechBubbleTimer > 0) this.speechBubbleTimer -= dt;
         if (pc.invulnTime > 0) {
             pc.invulnTime -= dt;
             if (pc.invulnTime <= 0) pc.invulnerable = false;
@@ -958,3 +966,4 @@ class CombatEngine {
 }
 
 window.combat = new CombatEngine();
+

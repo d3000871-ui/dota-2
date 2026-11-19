@@ -75,3 +75,4 @@
 Hech qanday qo'shimcha dastur o'rnatish shart emas!
 Oddiygina `index.html` faylini Google Chrome, Microsoft Edge, Opera yoki istalgan brauzerda oching va o'ynang!
 O'yin ma'lumotlari (`localStorage`) orqali kompyuteringizda avtomatik saqlanib boradi.
+

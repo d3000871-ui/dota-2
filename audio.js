@@ -253,3 +253,4 @@ class SoundSystem {
 
 const sounds = new SoundSystem();
 window.sounds = sounds;
+

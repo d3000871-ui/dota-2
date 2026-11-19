@@ -360,7 +360,7 @@ class GameState {
 
     initDefaultState() {
         this.player = {
-            name: 'Yakka Jangchi',
+            name: 'Diyorbek',
             level: 1,
             exp: 0,
             maxExp: 100,
@@ -776,3 +776,4 @@ class GameState {
 }
 
 window.gameState = new GameState();
+

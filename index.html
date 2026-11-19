@@ -18,13 +18,13 @@
     <!-- TOP HUD -->
     <div id="top-hud">
         <div class="hud-left">
-            <div class="avatar-frame">
-                <img src="assets/images (1).jpg" alt="Hero Avatar" id="hero-avatar">
+            <div class="avatar-frame" title="Nima gap botam! (Bosib ko'ring)" style="cursor: pointer;">
+                <img src="assets/hero_face.jpg" alt="Hero Avatar" id="hero-avatar" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%;">
                 <div class="vip-badge-tag" id="vip-badge-tag" style="display: none;">VIP</div>
             </div>
             <div class="player-info">
                 <div class="name-level-row">
-                    <span class="player-name" id="hud-name">Yakka Jangchi</span>
+                    <span class="player-name" id="hud-name">Diyorbek</span>
                     <span class="level-pill" id="hud-level">LV. 1</span>
                 </div>
                 <div class="bars-column">
@@ -261,6 +261,18 @@
             </div>
         </div>
     </div>
+
+    <!-- WELCOME INTRO OVERLAY ("NIMA GAP BOTAM!") -->
+    <div id="welcome-intro-overlay">
+        <div class="welcome-box">
+            <div class="welcome-avatar-wrap">
+                <img src="assets/hero_face.jpg" alt="Diyorbek">
+            </div>
+            <div class="welcome-title">👑 QAHRAMON DIYORBEK</div>
+            <div class="welcome-quote">"Nima gap botam! Jang qilishga va maxluqlarni tor-mor etishga tayyormisan?"</div>
+            <button class="welcome-enter-btn" id="btn-enter-game">⚔️ O'yinga Kirish (Boshlash)</button>
+        </div>
+    </div>
 </div>
 
 <script src="audio.js"></script>
@@ -268,6 +280,48 @@
 <script src="combat.js"></script>
 <script src="render.js"></script>
 <script>
+    // Voice and Welcome greeting ("Nima gap botam")
+    function speakNimaGap() {
+        if (window.sounds) {
+            window.sounds.init();
+            window.sounds.playCoin();
+        }
+        if (window.combat) {
+            window.combat.showSpeech("Nima gap botam! 😎", 7);
+        }
+        if ('speechSynthesis' in window) {
+            try {
+                window.speechSynthesis.cancel();
+                const utter = new SpeechSynthesisUtterance("Nima gap botam");
+                utter.rate = 0.95;
+                utter.pitch = 1.05;
+                window.speechSynthesis.speak(utter);
+            } catch(e) {
+                console.log("Speech synthesis error:", e);
+            }
+        }
+    }
+
+    const welcomeOverlay = document.getElementById('welcome-intro-overlay');
+    const enterBtn = document.getElementById('btn-enter-game');
+    if (enterBtn) {
+        enterBtn.onclick = () => {
+            speakNimaGap();
+            welcomeOverlay.classList.add('hidden');
+            setTimeout(() => {
+                welcomeOverlay.style.display = 'none';
+            }, 500);
+        };
+    }
+
+    // Clicking avatar in HUD also triggers "Nima gap botam"
+    const avatarEl = document.getElementById('hero-avatar');
+    if (avatarEl) {
+        avatarEl.onclick = () => {
+            speakNimaGap();
+        };
+    }
+
     // Input Handling
     const input = {
         left: false,
