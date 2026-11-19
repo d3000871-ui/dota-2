@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dota 2D - Anime Action RPG & Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="game-container">
+    <!-- Main Game Canvas -->
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+    <!-- TOP HUD -->
+    <div id="top-hud">
+        <div class="hud-left">
+            <div class="avatar-frame">
+                <img src="assets/images (1).jpg" alt="Hero Avatar" id="hero-avatar">
+                <div class="vip-badge-tag" id="vip-badge-tag" style="display: none;">VIP</div>
+            </div>
+            <div class="player-info">
+                <div class="name-level-row">
+                    <span class="player-name" id="hud-name">Yakka Jangchi</span>
+                    <span class="level-pill" id="hud-level">LV. 1</span>
+                </div>
+                <div class="bars-column">
+                    <div class="stat-bar-wrapper" title="Jon (HP)">
+                        <div class="stat-bar-fill hp-fill" id="hp-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="stat-bar-wrapper" title="Sehr Quvvati (Mana)">
+                        <div class="stat-bar-fill mana-fill" id="mana-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="stat-bar-wrapper" style="height: 4px;" title="Tajriba (EXP)">
+                        <div class="stat-bar-fill exp-fill" id="exp-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-right">
+            <div class="currency-badge gold-badge">
+                <span>💰</span>
+                <span id="hud-gold">1,500</span>
+            </div>
+            <div class="currency-badge gem-badge">
+                <span>💎</span>
+                <span id="hud-gems">50</span>
+            </div>
+            <button class="menu-btn" id="btn-wardrobe">
+                <span>🛡️</span>
+                <span>Qahramon</span>
+            </button>
+            <button class="menu-btn shop-btn" id="btn-shop">
+                <span>🏪</span>
+                <span>Magazin</span>
+            </button>
+            <button class="menu-btn daily-btn" id="btn-daily">
+                <span>🎁</span>
+                <span>Sovg'alar</span>
+            </button>
+            <button class="menu-btn" id="btn-help">
+                <span>⚙️</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- COMBO COUNTER -->
+    <div id="combo-container">
+        <div class="combo-count" id="combo-count">0</div>
+        <div class="combo-text">COMBO!</div>
+    </div>
+
+    <!-- BOTTOM ACTION BAR / SPELLS -->
+    <div id="bottom-hud">
+        <div class="spell-slot active" id="slot-attack" title="Oddiy Hujum (Z / Bosish)">
+            <span>🗡️</span>
+            <span class="spell-key">Z</span>
+        </div>
+        <div class="spell-slot" id="slot-spin" title="Aylanma Zarba (X)">
+            <span>🌀</span>
+            <span class="spell-key">X</span>
+        </div>
+        <div class="spell-slot" id="slot-dash" title="Tezkor Qochish (Shift / Space)">
+            <span>💨</span>
+            <span class="spell-key">Shift</span>
+        </div>
+        <div class="spell-slot" id="slot-q" title="Olov To'lqini (Q)">
+            <span>🔥</span>
+            <span class="spell-key">Q</span>
+            <div class="cooldown-overlay" id="cd-q"></div>
+        </div>
+        <div class="spell-slot" id="slot-w" title="Chaqmoq Bo'roni (W)">
+            <span>⚡</span>
+            <span class="spell-key">W</span>
+            <div class="cooldown-overlay" id="cd-w"></div>
+        </div>
+        <div class="spell-slot" id="slot-e" title="Qora Girdob (E)">
+            <span>🌌</span>
+            <span class="spell-key">E</span>
+            <div class="cooldown-overlay" id="cd-e"></div>
+        </div>
+        <div class="spell-slot" id="slot-r" title="Ajdarho Qudrati (R - Ultimate)">
+            <span>🐉</span>
+            <span class="spell-key">R</span>
+            <div class="cooldown-overlay" id="cd-r"></div>
+        </div>
+    </div>
+
+    <!-- MODAL 1: WARDROBE / SIMULATOR (KIYINTIRISH VA SOVUTLAR) -->
+    <div class="modal-backdrop" id="modal-wardrobe">
+        <div class="game-modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>🛡️</span>
+                    <span>Qahramon Simulyatori: Kiyintirish va Sovutlar</span>
+                </div>
+                <button class="modal-close-btn" data-close="modal-wardrobe">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="wardrobe-container">
+                    <!-- Left: Hero Doll & Current Gear -->
+                    <div class="hero-preview-box">
+                        <canvas id="dollCanvas" width="140" height="140" class="hero-doll-canvas"></canvas>
+                        <div class="equipped-slots-grid">
+                            <div class="slot-box" id="eq-weapon" title="Qurol">🗡️</div>
+                            <div class="slot-box" id="eq-armor" title="Sovut">🥋</div>
+                            <div class="slot-box" id="eq-helmet" title="Dubulg'a">🪖</div>
+                            <div class="slot-box" id="eq-cape" title="Plash / Qanot">🧣</div>
+                            <div class="slot-box" id="eq-relic" title="Sehrli Tumor">📿</div>
+                        </div>
+                        <div class="stats-list">
+                            <div class="stat-row"><span>Daraja:</span><strong id="stat-level" style="color:#ffd700">1</strong></div>
+                            <div class="stat-row"><span>Hujum (ATK):</span><strong id="stat-atk">35</strong></div>
+                            <div class="stat-row"><span>Himoya (DEF):</span><strong id="stat-def">15</strong></div>
+                            <div class="stat-row"><span>Maks Jon (HP):</span><strong id="stat-hp">650</strong></div>
+                            <div class="stat-row"><span>Sehr Quvvati:</span><strong id="stat-magic">50</strong></div>
+                            <div class="stat-row"><span>Kritik Ehtimol:</span><strong id="stat-crit">10%</strong></div>
+                            <div class="stat-row"><span>Tezlik:</span><strong id="stat-speed">5.5</strong></div>
+                        </div>
+                        <button class="levelup-action-btn" id="btn-manual-levelup">⚡ Darajani Ko'tarish (+1)</button>
+                    </div>
+
+                    <!-- Right: Inventory Items -->
+                    <div class="inventory-panel">
+                        <div style="font-size: 13px; font-weight: 700; color: #ffd700;">🎒 Inventar (Kiyish uchun bosing):</div>
+                        <div class="items-grid" id="inventory-grid">
+                            <!-- Items injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: SHOP & PROMOCODE (MAGAZIN) -->
+    <div class="modal-backdrop" id="modal-shop">
+        <div class="game-modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>🏪</span>
+                    <span>Sehrli Magazin va Promokodlar</span>
+                </div>
+                <button class="modal-close-btn" data-close="modal-shop">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Promocode input section -->
+                <div class="promocode-box">
+                    <div style="font-size: 13px; font-weight: 800; color: #ffd700;">🎁 Promokodni kiriting:</div>
+                    <div class="promo-row">
+                        <input type="text" id="promo-input" class="promo-input" placeholder="KODNI YOZING: DIYORBEK yoki AJDARHO" autocomplete="off">
+                        <button class="promo-submit-btn" id="btn-redeem-promo">Faollashtirish</button>
+                    </div>
+                    <div style="font-size: 11px; color: #a5d6a7;">
+                        ✨ <strong>DIYORBEK</strong>: +100 Daraja, 👑 VIP Cheksiz Boylik (999M Oltin) va Imperator To'plami!<br>
+                        🔥 <strong>AJDARHO</strong>: +100 Daraja, 500,000 Oltin, 20,000 Olmos va Afsonaviy Ajdarho To'plami!
+                    </div>
+                </div>
+
+                <!-- Shop Items Catalog -->
+                <div style="font-size: 13px; font-weight: 800; color: #ffd700; margin-bottom: 8px;">🛍️ Qurollar va Sovutlar:</div>
+                <div class="shop-catalog" id="shop-catalog">
+                    <!-- Shop items injected dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: DAILY REWARDS (1 KUNDA 1 MARTA BERILADIGAN SOVG'ALAR) -->
+    <div class="modal-backdrop" id="modal-daily">
+        <div class="game-modal" style="width: 720px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>🎁</span>
+                    <span>Kunlik Sovg'alar (1 Kunda 1 Marta)</span>
+                </div>
+                <button class="modal-close-btn" data-close="modal-daily">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; font-size: 13px; color: #8b949e; margin-bottom: 8px;">
+                    Har kuni o'yinga kiring va tobora qimmatbaho oltinlar, olmoslar hamda afsonaviy buyumlarni qo'lga kiriting!
+                </div>
+                <div class="daily-grid" id="daily-grid">
+                    <!-- 7 Days Cards injected dynamically -->
+                </div>
+                <div class="daily-claim-action">
+                    <button class="claim-big-btn" id="btn-claim-daily">🎁 Sovg'ani Olish</button>
+                </div>
+                <div id="daily-status-text" style="text-align: center; margin-top: 10px; font-size: 12px; color: #ffd700;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: CELEBRATION / VIP POPUP -->
+    <div class="modal-backdrop" id="modal-celebration">
+        <div class="game-modal" style="width: 550px; border-color: #ffd700;">
+            <div class="modal-header">
+                <div class="modal-title" id="celeb-title">👑 VIP QABUL QILINDI!</div>
+                <button class="modal-close-btn" data-close="modal-celebration">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="celebration-box">
+                    <div style="font-size: 48px;" id="celeb-icon">👑</div>
+                    <div class="celebration-text" id="celeb-text"></div>
+                    <button class="claim-big-btn" data-close="modal-celebration" style="margin-top: 10px;">DAVOM ETISH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: CONTROLS & HELP -->
+    <div class="modal-backdrop" id="modal-help">
+        <div class="game-modal" style="width: 600px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span>⚙️</span>
+                    <span>Boshqaruv va O'yin Qoidalari</span>
+                </div>
+                <button class="modal-close-btn" data-close="modal-help">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="controls-grid">
+                    <div class="control-item"><span>Harakatlanish (Chap / O'ng)</span><span class="control-key">A / D yoki ◄ / ►</span></div>
+                    <div class="control-item"><span>Sakrash</span><span class="control-key">W yoki ▲</span></div>
+                    <div class="control-item"><span>Oddiy Qilich Zarbi (Combo)</span><span class="control-key">Z yoki Sichqoncha</span></div>
+                    <div class="control-item"><span>Aylanma Og'ir Zarba</span><span class="control-key">X</span></div>
+                    <div class="control-item"><span>Tezkor Qochish (Dash)</span><span class="control-key">Shift yoki Space</span></div>
+                    <div class="control-item"><span>Sehr 1: Olov To'lqini</span><span class="control-key">Q</span></div>
+                    <div class="control-item"><span>Sehr 2: Chaqmoq Bo'roni</span><span class="control-key">W</span></div>
+                    <div class="control-item"><span>Sehr 3: Qora Girdob</span><span class="control-key">E</span></div>
+                    <div class="control-item"><span>Sehr 4: Ajdarho Qudrati (Ult)</span><span class="control-key">R</span></div>
+                    <div class="control-item"><span>Kiyintirish Simulyatori</span><span class="control-key">C tugmasi</span></div>
+                    <div class="control-item"><span>Magazin</span><span class="control-key">M tugmasi</span></div>
+                </div>
+                <div style="margin-top: 14px; text-align: center;">
+                    <button class="levelup-action-btn" id="btn-reset-save" style="background: #b71c1c; border-color: #f44336; width: auto; padding: 6px 14px;">🗑️ O'yinni Boshidan Boshlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="audio.js"></script>
+<script src="game.js"></script>
+<script src="combat.js"></script>
+<script src="render.js"></script>
+<script>
+    // Input Handling
+    const input = {
+        left: false,
+        right: false,
+        jump: false,
+        attack: false,
+        heavy: false,
+        dash: false,
+        spellQ: false,
+        spellW: false,
+        spellE: false,
+        spellR: false
+    };
+
+    window.addEventListener('keydown', (e) => {
+        // Ignore if typing in input
+        if (e.target.tagName === 'INPUT') return;
+
+        const key = e.key.toLowerCase();
+        if (key === 'a' || key === 'arrowleft') input.left = true;
+        if (key === 'd' || key === 'arrowright') input.right = true;
+        if (key === 'w' || key === 'arrowup') input.jump = true;
+        if (key === 'z') input.attack = true;
+        if (key === 'x') input.heavy = true;
+        if (key === 'shift' || key === ' ') input.dash = true;
+        if (key === 'q') input.spellQ = true;
+        if (key === 'w') input.spellW = true;
+        if (key === 'e') input.spellE = true;
+        if (key === 'r') input.spellR = true;
+
+        if (key === 'c') toggleModal('modal-wardrobe');
+        if (key === 'm') toggleModal('modal-shop');
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+
+        const key = e.key.toLowerCase();
+        if (key === 'a' || key === 'arrowleft') input.left = false;
+        if (key === 'd' || key === 'arrowright') input.right = false;
+        if (key === 'w' || key === 'arrowup') input.jump = false;
+        if (key === 'z') input.attack = false;
+        if (key === 'x') input.heavy = false;
+        if (key === 'shift' || key === ' ') input.dash = false;
+        if (key === 'q') input.spellQ = false;
+        if (key === 'w') input.spellW = false;
+        if (key === 'e') input.spellE = false;
+        if (key === 'r') input.spellR = false;
+    });
+
+    const canvas = document.getElementById('gameCanvas');
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.button === 0) input.attack = true;
+        if (e.button === 2) input.heavy = true;
+        if (window.sounds) window.sounds.init();
+    });
+    canvas.addEventListener('mouseup', () => {
+        input.attack = false;
+        input.heavy = false;
+    });
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Spell bar buttons click
+    document.getElementById('slot-attack').onclick = () => { input.attack = true; setTimeout(() => input.attack = false, 100); };
+    document.getElementById('slot-spin').onclick = () => { input.heavy = true; setTimeout(() => input.heavy = false, 100); };
+    document.getElementById('slot-dash').onclick = () => { input.dash = true; setTimeout(() => input.dash = false, 100); };
+    document.getElementById('slot-q').onclick = () => { input.spellQ = true; };
+    document.getElementById('slot-w').onclick = () => { input.spellW = true; };
+    document.getElementById('slot-e').onclick = () => { input.spellE = true; };
+    document.getElementById('slot-r').onclick = () => { input.spellR = true; };
+
+    // Modal management
+    function toggleModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        const isOpen = modal.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('open'));
+        if (!isOpen) {
+            modal.classList.add('open');
+            if (modalId === 'modal-wardrobe') renderWardrobe();
+            if (modalId === 'modal-shop') renderShop();
+            if (modalId === 'modal-daily') renderDaily();
+        }
+    }
+
+    document.querySelectorAll('[data-close]').forEach(btn => {
+        btn.onclick = () => {
+            const id = btn.getAttribute('data-close');
+            document.getElementById(id).classList.remove('open');
+        };
+    });
+
+    document.getElementById('btn-wardrobe').onclick = () => toggleModal('modal-wardrobe');
+    document.getElementById('btn-shop').onclick = () => toggleModal('modal-shop');
+    document.getElementById('btn-daily').onclick = () => toggleModal('modal-daily');
+    document.getElementById('btn-help').onclick = () => toggleModal('modal-help');
+
+    // Reset button
+    document.getElementById('btn-reset-save').onclick = () => {
+        if (confirm("Rostdan ham barcha yutuqlarni o'chirib, o'yinni boshidan boshlamoqchimisiz?")) {
+            window.gameState.reset();
+            window.combat.reset();
+            toggleModal('modal-help');
+            updateHUD();
+        }
+    };
+
+    // Manual Level Up
+    document.getElementById('btn-manual-levelup').onclick = () => {
+        window.gameState.levelUpManual();
+        renderWardrobe();
+        updateHUD();
+    };
+
+    // Promocode handler
+    document.getElementById('btn-redeem-promo').onclick = () => {
+        const inputEl = document.getElementById('promo-input');
+        const code = inputEl.value;
+        const result = window.gameState.redeemPromocode(code);
+        inputEl.value = '';
+
+        if (result.success) {
+            showCelebration(result.vip ? '👑 VIP HUKMDOR STATUSI!' : '🐉 AJDARHO QUDARTI!', result.msg, result.vip ? '👑' : '🐉');
+            updateHUD();
+            renderShop();
+        } else {
+            alert(result.msg);
+        }
+    };
+
+    function showCelebration(title, text, icon = '🎉') {
+        document.getElementById('celeb-title').innerText = title;
+        document.getElementById('celeb-text').innerText = text;
+        document.getElementById('celeb-icon').innerText = icon;
+        toggleModal('modal-celebration');
+    }
+
+    // Daily Claim Handler
+    document.getElementById('btn-claim-daily').onclick = () => {
+        const res = window.gameState.claimDailyReward();
+        if (res.success) {
+            showCelebration("🎁 KUNLIK SOVG'A!", res.msg, '🎁');
+            updateHUD();
+            renderDaily();
+        } else {
+            alert(res.msg);
+        }
+    };
+
+    // Render Wardrobe & Doll
+    function renderWardrobe() {
+        const state = window.gameState;
+        const p = state.player;
+        const eq = state.equipment;
+
+        document.getElementById('stat-level').innerText = p.level;
+        document.getElementById('stat-atk').innerText = p.atk;
+        document.getElementById('stat-def').innerText = p.def;
+        document.getElementById('stat-hp').innerText = `${p.hp} / ${p.maxHp}`;
+        document.getElementById('stat-magic').innerText = p.magicPower;
+        document.getElementById('stat-crit').innerText = `${p.critRate}%`;
+        document.getElementById('stat-speed').innerText = p.speed.toFixed(1);
+
+        // Equipped slots icons
+        const slots = ['weapon', 'armor', 'helmet', 'cape', 'relic'];
+        slots.forEach(slot => {
+            const el = document.getElementById(`eq-${slot}`);
+            const itemId = eq[slot];
+            if (itemId && ITEMS_DATABASE[itemId]) {
+                el.innerText = ITEMS_DATABASE[itemId].icon;
+                el.title = `${ITEMS_DATABASE[itemId].name} (Yechish uchun bosing)`;
+                el.style.borderColor = ITEMS_DATABASE[itemId].rarity.color;
+                el.onclick = () => {
+                    state.unequipItem(slot);
+                    renderWardrobe();
+                    updateHUD();
+                };
+            } else {
+                el.innerText = slot === 'weapon' ? '🗡️' : slot === 'armor' ? '🥋' : slot === 'helmet' ? '🪖' : slot === 'cape' ? '🧣' : '📿';
+                el.title = 'Bo\'sh slot';
+                el.style.borderColor = '#484f58';
+                el.onclick = null;
+            }
+        });
+
+        // Inventory Grid
+        const grid = document.getElementById('inventory-grid');
+        grid.innerHTML = '';
+
+        state.inventory.forEach(invItem => {
+            const it = ITEMS_DATABASE[invItem.itemId];
+            if (!it) return;
+
+            const isEquipped = Object.values(eq).includes(it.id);
+
+            const card = document.createElement('div');
+            card.className = `item-card ${isEquipped ? 'equipped' : ''}`;
+            card.style.borderColor = it.rarity.color;
+            card.style.background = it.rarity.bg;
+
+            let badgeHtml = isEquipped ? `<span class="item-badge-equipped">KIYILGAN</span>` : '';
+            card.innerHTML = `
+                ${badgeHtml}
+                <div class="item-icon">${it.icon}</div>
+                <div class="item-name" style="color: ${it.rarity.color};">${it.name}</div>
+                <div class="item-count">x${invItem.count}</div>
+            `;
+
+            card.onclick = () => {
+                if (it.type === ITEM_TYPES.CONSUMABLE) {
+                    state.useConsumable(it.id);
+                } else {
+                    if (isEquipped) {
+                        state.unequipItem(it.type);
+                    } else {
+                        state.equipItem(it.id);
+                    }
+                }
+                renderWardrobe();
+                updateHUD();
+            };
+
+            grid.appendChild(card);
+        });
+
+        // Draw Paper Doll
+        drawPaperDoll();
+    }
+
+    function drawPaperDoll() {
+        const dCanvas = document.getElementById('dollCanvas');
+        if (!dCanvas) return;
+        const dCtx = dCanvas.getContext('2d');
+        dCtx.clearRect(0, 0, dCanvas.width, dCanvas.height);
+
+        // Render Hero in Doll Canvas
+        const mockCombat = {
+            playerCombat: {
+                x: 70,
+                y: 115,
+                vx: 0,
+                vy: 0,
+                facing: 1,
+                isAttacking: false,
+                invulnerable: false
+            },
+            cameraX: 0
+        };
+
+        window.renderer.drawHero(mockCombat.playerCombat, window.gameState, 0, dCtx);
+    }
+
+    // Render Shop Catalog
+    function renderShop() {
+        const catalog = document.getElementById('shop-catalog');
+        catalog.innerHTML = '';
+
+        for (const id in ITEMS_DATABASE) {
+            const it = ITEMS_DATABASE[id];
+            const card = document.createElement('div');
+            card.className = 'shop-item-card';
+            card.style.borderColor = it.rarity.color;
+
+            let priceHtml = '';
+            if (it.price > 0) priceHtml += `💰 ${it.price.toLocaleString()} `;
+            if (it.gemPrice > 0) priceHtml += `💎 ${it.gemPrice.toLocaleString()} `;
+
+            let statsDesc = '';
+            if (it.atk) statsDesc += `ATK +${it.atk} `;
+            if (it.def) statsDesc += `DEF +${it.def} `;
+            if (it.hp) statsDesc += `HP +${it.hp} `;
+            if (it.restoreHp) statsDesc += `Tiklash +${it.restoreHp} HP `;
+            if (it.exp) statsDesc += `+${it.exp} EXP `;
+
+            card.innerHTML = `
+                <div class="shop-item-top">
+                    <span class="shop-item-icon">${it.icon}</span>
+                    <div class="shop-item-info">
+                        <span class="shop-item-name" style="color: ${it.rarity.color};">${it.name}</span>
+                        <span class="shop-item-stats">${statsDesc}</span>
+                    </div>
+                </div>
+                <div style="font-size: 10px; color: #8b949e; line-height: 1.3;">${it.desc}</div>
+                <button class="shop-buy-btn" data-buy="${it.id}">
+                    <span>Sotib Olish</span>
+                    <strong>(${priceHtml})</strong>
+                </button>
+            `;
+
+            card.querySelector('.shop-buy-btn').onclick = () => {
+                const res = window.gameState.buyItem(it.id);
+                if (res.success) {
+                    updateHUD();
+                    renderShop();
+                } else {
+                    alert(res.msg);
+                }
+            };
+
+            catalog.appendChild(card);
+        }
+    }
+
+    // Render Daily Rewards Grid
+    function renderDaily() {
+        const info = window.gameState.getDailyRewardInfo();
+        const grid = document.getElementById('daily-grid');
+        grid.innerHTML = '';
+
+        info.rewardsList.forEach((r, idx) => {
+            const isToday = ((info.streak - 1) % 7) === idx;
+            const isPassed = ((info.streak - 1) % 7) > idx;
+
+            const card = document.createElement('div');
+            card.className = `daily-card ${isToday ? 'active-day' : ''} ${isPassed ? 'claimed' : ''}`;
+            card.innerHTML = `
+                <div style="font-size: 11px; font-weight: 800; color: #ffd700;">${r.day}-KUN</div>
+                <div style="font-size: 24px;">🎁</div>
+                <div style="font-size: 10px; font-weight: 700; color: #fff;">${r.label}</div>
+            `;
+            grid.appendChild(card);
+        });
+
+        const statusEl = document.getElementById('daily-status-text');
+        const claimBtn = document.getElementById('btn-claim-daily');
+
+        if (info.canClaim) {
+            statusEl.innerText = '✨ Bugungi sovg\'a sizni kutmoqda! Olish tugmasini bosing!';
+            claimBtn.disabled = false;
+            claimBtn.style.opacity = '1';
+        } else {
+            const h = Math.floor(info.remainingMs / (1000 * 60 * 60));
+            const m = Math.floor((info.remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+            statusEl.innerText = `⏳ Bugungi sovg'a olingan. Keyingi sovg'a ${h} soat ${m} daqiqadan keyin ochiladi.`;
+            claimBtn.disabled = true;
+            claimBtn.style.opacity = '0.5';
+        }
+    }
+
+    // HUD Update
+    function updateHUD() {
+        const p = window.gameState.player;
+        document.getElementById('hud-name').innerText = p.name;
+        document.getElementById('hud-level').innerText = `LV. ${p.level}`;
+        document.getElementById('hud-gold').innerText = p.gold.toLocaleString();
+        document.getElementById('hud-gems').innerText = p.gems.toLocaleString();
+
+        const hpPct = Math.max(0, Math.min(100, (p.hp / p.maxHp) * 100));
+        const manaPct = Math.max(0, Math.min(100, (p.mana / p.maxMana) * 100));
+        const expPct = Math.max(0, Math.min(100, (p.exp / p.maxExp) * 100));
+
+        document.getElementById('hp-bar').style.width = `${hpPct}%`;
+        document.getElementById('mana-bar').style.width = `${manaPct}%`;
+        document.getElementById('exp-bar').style.width = `${expPct}%`;
+
+        // VIP Badge in avatar
+        const vipTag = document.getElementById('vip-badge-tag');
+        if (p.vip) {
+            vipTag.style.display = 'block';
+        } else {
+            vipTag.style.display = 'none';
+        }
+
+        // Combo
+        const comboEl = document.getElementById('combo-container');
+        if (window.combat.combo > 1) {
+            comboEl.style.display = 'block';
+            document.getElementById('combo-count').innerText = window.combat.combo;
+        } else {
+            comboEl.style.display = 'none';
+        }
+
+        // Spells cooldown overlay
+        const cds = window.combat.playerCombat.spellCooldowns;
+        ['q', 'w', 'e', 'r'].forEach(k => {
+            const cdEl = document.getElementById(`cd-${k}`);
+            if (cds[k] > 0) {
+                cdEl.style.display = 'flex';
+                cdEl.innerText = Math.ceil(cds[k]) + 's';
+            } else {
+                cdEl.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize Game
+    window.renderer = new GameRenderer(canvas);
+
+    // Initial Monster Spawns
+    window.combat.spawnMonster('goblin', 700);
+    window.combat.spawnMonster('wolf', 950);
+    window.combat.spawnMonster('mage', 1200);
+
+    // Main Game Loop
+    let lastTime = performance.now();
+    function gameLoop(now) {
+        const dt = Math.min(0.1, (now - lastTime) / 1000);
+        lastTime = now;
+
+        // Update Combat & World
+        window.combat.update(dt, input);
+
+        // Render Canvas
+        window.renderer.render(window.combat, window.gameState, dt);
+
+        // Update HUD
+        updateHUD();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    requestAnimationFrame(gameLoop);
+</script>
+
+</body>
+</html>
