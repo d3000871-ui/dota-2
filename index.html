@@ -33,9 +33,8 @@
         </div>
     </div>
 
-    <!-- SETTINGS & FACE TOGGLE -->
+    <!-- SETTINGS BAR -->
     <div id="top-controls-bar">
-        <button class="icon-toggle-btn" id="btn-toggle-face" title="Yuzni almashtirish">👤 DIYORBEK</button>
         <button class="icon-toggle-btn" id="btn-toggle-sound" title="Ovozni yoqish/o'chirish">🔊 OVOZ</button>
     </div>
 
@@ -59,7 +58,7 @@
     <div id="loading-overlay">
         <div class="loading-mario-logo">
             <div style="font-size: 40px;">🍄</div>
-            <div class="mario-logo-text">SUPER MARIO<br><span style="color:#00a800;font-size:18px;">DIYORBEK ADVENTURE</span></div>
+            <div class="mario-logo-text">SUPER MARIO<br><span style="color:#00a800;font-size:18px;">RETRO CLASSIC EDITION</span></div>
         </div>
 
         <div class="loading-bar-wrap">
@@ -182,7 +181,7 @@
             }
         },
         {
-            text: "Diyorbek (Super Mario): 'Xavotir olmang malika, men sizni qutqaraman! Nima gap botam, ketdik!'",
+            text: "Super Mario: 'Xavotir olmang malika, men sizni qutqaraman! Ketdik!'",
             action: () => {
                 marioEl.style.left = '420px';
                 marioEl.style.transform = 'scale(1.3)';
@@ -255,9 +254,6 @@
             const isMuted = window.marioAudio.toggleMute();
             document.getElementById('btn-toggle-sound').innerText = isMuted ? "🔇 OVOZSIZ" : "🔊 OVOZ";
         }
-        if (k === 'c') {
-            toggleFaceMode();
-        }
     });
 
     window.addEventListener('keyup', (e) => {
@@ -304,21 +300,6 @@
     bindTouch('btn-touch-down', 'down');
     bindTouch('btn-touch-a', 'jump');
     bindTouch('btn-touch-b', 'fire', true);
-
-    // Face mode toggle
-    function toggleFaceMode() {
-        game.useCustomFace = !game.useCustomFace;
-        const btn = document.getElementById('btn-toggle-face');
-        const title = document.getElementById('hud-player-title');
-        if (game.useCustomFace) {
-            btn.innerText = "👤 DIYORBEK";
-            title.innerText = "DIYORBEK";
-        } else {
-            btn.innerText = "🍄 MARIO";
-            title.innerText = "MARIO";
-        }
-    }
-    document.getElementById('btn-toggle-face').onclick = toggleFaceMode;
 
     document.getElementById('btn-toggle-sound').onclick = () => {
         const isMuted = window.marioAudio.toggleMute();

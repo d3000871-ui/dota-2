@@ -38,11 +38,6 @@ class SuperMarioGame {
         this.timerAccumulator = 0;
 
         this.cameraX = 0;
-        this.useCustomFace = true; // Use user's photo on Mario's face!
-        this.heroFaceImg = new Image();
-        this.heroFaceImg.src = 'assets/hero_face.jpg';
-        this.faceLoaded = false;
-        this.heroFaceImg.onload = () => { this.faceLoaded = true; };
 
         // Input
         this.keys = {
@@ -928,53 +923,133 @@ class SuperMarioGame {
         const isSuper = m.state !== 'small';
         const shirtColor = m.state === 'fire' ? '#ffffff' : '#d82800';
         const overallsColor = m.state === 'fire' ? '#d82800' : '#0028d8';
+        const skinColor = '#fc9838';
+        const hairColor = '#684000';
 
-        // 1. Overalls & Body
-        ctx.fillStyle = overallsColor;
-        ctx.fillRect(-8, isSuper ? -24 : -18, 16, isSuper ? 16 : 12);
+        const isRunning = Math.abs(m.vx) > 0.2;
+        const animStep = Math.floor((m.x / 14) % 3);
 
-        // Shoes
-        ctx.fillStyle = '#684000';
-        ctx.fillRect(-10, -6, 8, 6);
-        ctx.fillRect(2, -6, 8, 6);
-
-        // Shirt
-        ctx.fillStyle = shirtColor;
-        ctx.fillRect(-9, isSuper ? -34 : -24, 18, isSuper ? 12 : 8);
-
-        // 2. Head / Face (With user's custom photo support!)
-        if (this.useCustomFace && this.faceLoaded) {
-            // Draw real custom face clipped in circle
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(0, isSuper ? -44 : -32, 10, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(this.heroFaceImg, 160, 120, 448, 480, -10, isSuper ? -54 : -42, 20, 20);
-            ctx.restore();
-
-            // Mario Red Cap on top of user's head!
+        if (m.isDead) {
+            // Death frame
             ctx.fillStyle = shirtColor;
-            ctx.beginPath();
-            ctx.moveTo(-10, isSuper ? -48 : -36);
-            ctx.lineTo(-6, isSuper ? -58 : -46);
-            ctx.lineTo(8, isSuper ? -58 : -46);
-            ctx.lineTo(12, isSuper ? -48 : -36);
-            ctx.closePath();
-            ctx.fill();
-            // Cap visor
-            ctx.fillRect(2, isSuper ? -50 : -38, 12, 3);
-        } else {
-            // Classic Mario 8-Bit Pixel Face
-            ctx.fillStyle = '#fc9838'; // Peach skin
-            ctx.fillRect(-8, isSuper ? -46 : -34, 14, 12);
-            // Moustache & Eye
+            ctx.fillRect(-8, -26, 16, 12);
+            ctx.fillStyle = overallsColor;
+            ctx.fillRect(-6, -14, 12, 10);
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(-6, -34, 12, 8);
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-8, -38, 16, 6);
+            ctx.restore();
+            return;
+        }
+
+        if (!m.isGrounded) {
+            // Jump pose: one arm raised, legs split
+            ctx.fillStyle = overallsColor;
+            ctx.fillRect(-9, isSuper ? -18 : -14, 8, 8);
+            ctx.fillRect(2, isSuper ? -14 : -10, 8, 6);
+            ctx.fillStyle = hairColor;
+            ctx.fillRect(-11, -8, 8, 6);
+            ctx.fillRect(4, -4, 8, 6);
+
+            // Body
+            ctx.fillStyle = overallsColor;
+            ctx.fillRect(-8, isSuper ? -26 : -18, 16, isSuper ? 14 : 10);
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-8, isSuper ? -34 : -24, 16, isSuper ? 10 : 8);
+
+            // Arm raised
+            ctx.fillRect(4, isSuper ? -44 : -32, 7, 10);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(4, isSuper ? -47 : -35, 7, 5); // White glove
+
+            // Head & Cap (Authentic 8-Bit Mario)
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(-6, isSuper ? -46 : -34, 12, 12);
             ctx.fillStyle = '#000000';
-            ctx.fillRect(2, isSuper ? -42 : -30, 3, 3); // Eye
-            ctx.fillRect(0, isSuper ? -38 : -26, 8, 3);  // Moustache
+            ctx.fillRect(2, isSuper ? -42 : -30, 3, 4); // Eye
+            ctx.fillRect(1, isSuper ? -38 : -26, 8, 4); // Mustache
+            ctx.fillStyle = hairColor;
+            ctx.fillRect(-6, isSuper ? -44 : -32, 3, 6); // Sideburn
+
             // Red Cap
             ctx.fillStyle = shirtColor;
             ctx.fillRect(-8, isSuper ? -54 : -42, 16, 8);
-            ctx.fillRect(2, isSuper ? -48 : -36, 8, 3);
+            ctx.fillRect(1, isSuper ? -48 : -36, 10, 3); // Visor
+        } else if (isRunning) {
+            // Running animation cycle
+            ctx.fillStyle = overallsColor;
+            if (animStep === 0) {
+                ctx.fillRect(-8, isSuper ? -18 : -14, 8, 12);
+                ctx.fillRect(2, isSuper ? -16 : -12, 8, 8);
+                ctx.fillStyle = hairColor;
+                ctx.fillRect(-10, -6, 8, 6);
+                ctx.fillRect(4, -4, 8, 6);
+            } else if (animStep === 1) {
+                ctx.fillRect(-6, isSuper ? -18 : -14, 12, 10);
+                ctx.fillStyle = hairColor;
+                ctx.fillRect(-6, -6, 12, 6);
+            } else {
+                ctx.fillRect(-8, isSuper ? -16 : -12, 8, 8);
+                ctx.fillRect(2, isSuper ? -18 : -14, 8, 12);
+                ctx.fillStyle = hairColor;
+                ctx.fillRect(-6, -4, 8, 6);
+                ctx.fillRect(2, -6, 8, 6);
+            }
+
+            // Torso & Overalls
+            ctx.fillStyle = overallsColor;
+            ctx.fillRect(-8, isSuper ? -26 : -18, 16, isSuper ? 12 : 10);
+            ctx.fillStyle = '#fce000'; // Yellow overall button
+            ctx.fillRect(-2, isSuper ? -22 : -15, 2, 2);
+
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-8, isSuper ? -34 : -24, 16, isSuper ? 10 : 8);
+
+            // Head & Cap
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(-6, isSuper ? -46 : -34, 12, 12);
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(2, isSuper ? -42 : -30, 3, 4); // Eye
+            ctx.fillRect(1, isSuper ? -38 : -26, 8, 4); // Mustache
+            ctx.fillStyle = hairColor;
+            ctx.fillRect(-6, isSuper ? -44 : -32, 3, 6); // Sideburn
+
+            // Red Cap
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-8, isSuper ? -54 : -42, 16, 8);
+            ctx.fillRect(1, isSuper ? -48 : -36, 10, 3); // Visor
+        } else {
+            // Standing Idle Pose
+            ctx.fillStyle = overallsColor;
+            ctx.fillRect(-7, isSuper ? -18 : -14, 6, 10);
+            ctx.fillRect(1, isSuper ? -18 : -14, 6, 10);
+            ctx.fillStyle = hairColor;
+            ctx.fillRect(-9, -6, 8, 6);
+            ctx.fillRect(1, -6, 8, 6);
+
+            // Torso & Overalls
+            ctx.fillStyle = overallsColor;
+            ctx.fillRect(-8, isSuper ? -26 : -18, 16, isSuper ? 12 : 10);
+            ctx.fillStyle = '#fce000';
+            ctx.fillRect(-2, isSuper ? -22 : -15, 2, 2);
+
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-8, isSuper ? -34 : -24, 16, isSuper ? 10 : 8);
+
+            // Head & Cap
+            ctx.fillStyle = skinColor;
+            ctx.fillRect(-6, isSuper ? -46 : -34, 12, 12);
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(2, isSuper ? -42 : -30, 3, 4); // Eye
+            ctx.fillRect(1, isSuper ? -38 : -26, 8, 4); // Mustache
+            ctx.fillStyle = hairColor;
+            ctx.fillRect(-6, isSuper ? -44 : -32, 3, 6); // Sideburn
+
+            // Red Cap
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-8, isSuper ? -54 : -42, 16, 8);
+            ctx.fillRect(1, isSuper ? -48 : -36, 10, 3); // Visor
         }
 
         ctx.restore();
