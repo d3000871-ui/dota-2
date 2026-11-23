@@ -1,78 +1,55 @@
-# ⚔️ Dota 2D - Anime Action RPG & Qahramon Simulyatori
+# 🍄 Super Mario: Diyorbek Adventure (World 1-1)
 
-> **Dota 2D** — anime uslubidagi yakka jangchi bilan afsonaviy olam bo'ylab sayohat qilish, maxluqlar (goblinlar, soya bo'rilari, qora sehrgarlar, tosh bahodirlar va qadimgi olov ajdarhosi) bilan qonli va shiddatli janglar olib borish, sehr-jodu ishlatish, o'z qahramonini kiyintirish, sovutlar kiydirish va darajasini yuksaltirishga mo'ljallangan to'liq 2D Action RPG simulyator o'yini.
-
----
-
-## 🎮 O'yin Xususiyatlari (Features)
-
-1. **Shiddatli Ekshn va Qonli Effektlar (Dynamic Action & Blood Effects)**:
-   - Haqiqiy fizikaga asoslangan qon sachrashlari (`qon effektlari`), yerda qoladigan dog'lar va chaqnoq zarbalar!
-   - Kombinatsiyalangan qilich zarbalari (Combo counter: 10x, 20x, 50x Godlike!).
-   - Tanqidiy zarbalar (Critical Strikes), ekranning silkinishi (Screen Shake) va zarba to'xtashi (Hit-Stop).
-
-2. **Qudratli Sehr-Jodular (Magic Spells)**:
-   - 🔥 **Q - Olov To'lqini (Fireball Surge)**: Dushmanlarni kuydiruvchi 3 ta portlovchi olov sharlari.
-   - ⚡ **W - Chaqmoq Bo'roni (Thunder Wrath)**: Osmondan to'g'ridan-to'g'ri dushmanlarning ustiga tushuvchi chaqmoqlar.
-   - 🌌 **E - Qora Girdob (Void Vortex)**: Barcha atrofdagi dushmanlarni o'ziga tortib, parchalanuvchi qora tuynuk.
-   - 🐉 **R - Ajdarho Qudrati (Astral Dragon Burst - Ultimate)**: Butun ekranni qamrab oluvchi ulkan oltin ajdarho zarbasi!
-
-3. **Qahramon Simulyatori: Kiyintirish va Sovutlar (Wardrobe Simulator)**:
-   - Qahramonning tashqi ko'rinishini jonli o'zgartiruvchi 2D Paper-Doll tizimi.
-   - **Qurollar**: Temir Qilich, Oltin Qilich, Shamol Shamshiri, Olovli Nayza, Ajdarho Qilichi, **Diyorbek Qiyomat Qilichi**.
-   - **Sovutlar**: Sayohatchi Nimchasi, Po'lat Ritsar Sovuti, Qora Tungi Sovut, Ajdarho Po'lat Sovuti, **Diyorbek Imperator VIP Sovuti**.
-   - **Dubulg'alar va Tojlar**: Ritsar Dubulg'asi, Ajdarho Toji, **VIP Imperator Toji**.
-   - **Plashlar va Qanotlar**: Qizil Plash, Olovli Qanotlar, **VIP Oltin Astral Qanotlar** (qahramon orqasida qanot qoqadi!).
-   - **Sehrli Tumorlar**: Shifo Tumori, Ajdarho Yuragi, **Diyorbek Abadiyat Toshi**.
-
-4. **Daraja Ko'tarish Tizimi (Level Up)**:
-   - Dushmanlarni yengib tajriba (EXP) yig'ish yoki EXP kitoblari orqali darajani ko'tarish.
-   - Har bir darajada: Jon (HP), Sehr (Mana), Hujum (ATK), Himoya (DEF) va Sehr kuchi oshadi!
-
-5. **Sehrli Magazin (Shop)**:
-   - Qurollar, sovutlar, dubulg'alar, eliksirlar va EXP kitoblarini Oltin (Gold) va Olmoslar (Gems) evaziga sotib olish imkoniyati.
-
-6. **1 Kunda 1 Marta Beriladigan Kunlik Sovg'alar (Daily Rewards)**:
-   - Har kuni kirganda oshib boruvchi 7 kunlik sovg'alar kalendari.
-   - Oltinlar, olmoslar, eliksirlar va 7-kunda **Afsonaviy Ajdarho Qilichi**!
-   - 24 soatlik taymer va avtomatik saqlash.
-
-7. **Promokodlar Tizimi (Promocodes)**:
-   Magazindagi promokod kiritish maydoniga quyidagi kodlarni yozib faollashtiring:
-   - 👑 **`DIYORBEK`**:
-     * **+100 DARAJA** darhol qo'shiladi!
-     * **👑 VIP HUKMDOR STATUSI** faollashadi!
-     * **VIP Cheksiz Boylik**: **999,999,999 Oltin** va **999,999 Olmos**!
-     * **Diyorbek Imperator VIP Sovuti** va **Diyorbek Qiyomat Qilichi** avtomatik kiydiriladi!
-     * Qahramon atrofida aylanuvchi ilohiy oltin yulduzlar va qanotlar namoyon bo'ladi!
-   - 🐉 **`AJDARHO`**:
-     * **+100 DARAJA** darhol qo'shiladi!
-     * **500,000 Oltin** va **20,000 Olmos** beriladi!
-     * **Ajdarho Qilichi**, **Ajdarho Po'lat Sovuti**, **Ajdarho Toji** va **Olovli Qanotlar** beriladi!
+Klassik retro Nintendo uslubidagi **Super Mario** 2D platformer o'yini! O'yinga kirishda yuklanish (zagruzka) ekrani, animatsion ertak (cutscene prologue) va haqiqiy NES fizikasi bilan yaratilgan.
 
 ---
 
-## ⌨️ Boshqaruv Tugmalari (Controls)
+## 🎮 O'yin Xususiyatlari:
 
-| Harakat / Harakat | Klaviatura | Sichqoncha |
+1. **Retro Zagruzka Qismi (Loading Screen)**:
+   - 0% dan 100% gacha harakatlanuvchi pikselli yuklanish paneli.
+   - O'yin sirlari va maslahatlar.
+   - 8-bitli tanga ovozi bilan o'yinga kirish.
+
+2. **Animatsion Ertak / Kirish Animatsiyasi (Prologue Cutscene)**:
+   - Malika Peach Qo'ziqorin Qirolligi bog'ida sayr qilib yurganida dahshatli Bowser uni o'g'irlab ketadi.
+   - Mario (Diyorbek) malikani qutqarishga va'da beradi va yashil quvur ichiga sakrab sarguzasht sari otlanadi!
+   - O'tkazib yuborish (Skip) yoki qadam-baqadam ertakni tomosha qilish imkoniyati.
+
+3. **Klassik Super Mario Mexanikasi**:
+   - **Savolli bloklar `[?]`**: Bosh bilan urganda sakrab chiqadigan tangalar va qizil sehrli qo'ziqorin (Super Mushroom)!
+   - **G'isht bloklari**: Kichik Mario ularni tebratadi, Katta Mario esa g'ishtlarni 4 bo'lakka parchalab tashlaydi!
+   - **Super Mushroom**: Marioning bo'yini o'stiradi va qo'shimcha jon beradi!
+   - **Olov Guli (Fire Flower)**: Olov to'plarini otib dushmanlarni yengish imkoniyati (`X` tugmasi).
+   - **Dushmanlar**:
+     * **Goomba**: Ustiga sakrab majaqlab tashlash mumkin!
+     * **Koopa Troopa**: Ustiga sakraganda kosasiga berkinadi, kosasini tepib boshqa dushmanlarni urib yuborish mumkin!
+   - **Yashil Quvurlar (Pipes)** va baland tepaliklar.
+   - **Bayroq ustuni (Flagpole) va Qasr**: Bosqichni yakunlash, bayroq tushishi va g'alaba fanfarasi!
+
+4. **Yuzni O'zgartirish (Custom Face)**:
+   - Yuqoridagi **"👤 DIYORBEK"** tugmasi orqali qahramon yuzini sizning haqiqiy suratingiz bilan qizil kepkali Marioga aylantirish yoki klassik 8-bit Mario yuziga o'tish mumkin!
+
+5. **Haqiqiy 8-Bit Web Audio Sintezatori**:
+   - Sakrash, tanga olish, blok urish, g'isht sinishi, dushmanni majaqlash, quvurga kirish va original Mario fon musiqasi (BGM)!
+
+---
+
+## ⌨️ Boshqaruv Tugmalari:
+
+| Harakat | Klaviatura | Ekrandagi Tugma (Sensor) |
 | :--- | :--- | :--- |
-| **Yurish (Chap / O'ng)** | `A` / `D` yoki `◄` / `►` | - |
-| **Sakrash** | `W` yoki `▲` | - |
-| **Oddiy Qilich Kombosi** | `Z` | Chap tugma (Left Click) |
-| **Aylanma Og'ir Zarba** | `X` | O'ng tugma (Right Click) |
-| **Tezkor Qochish (Dash)** | `Shift` yoki `Space` | - |
-| **Sehr 1 (Olov To'lqini)** | `Q` | - |
-| **Sehr 2 (Chaqmoq Bo'roni)**| `W` | - |
-| **Sehr 3 (Qora Girdob)** | `E` | - |
-| **Sehr 4 (Ajdarho Quvvati)** | `R` | - |
-| **Qahramon Menyusi** | `C` | "Qahramon" tugmasi |
-| **Magazin / Promokod** | `M` | "Magazin" tugmasi |
+| **Chapga yurish** | `A` yoki `◄` | `◄` (D-pad) |
+| **O'ngga yurish** | `D` yoki `►` | `►` (D-pad) |
+| **Pastga egilish** | `S` yoki `▼` | `▼` (D-pad) |
+| **Sakrash** | `W`, `▲` yoki `Space` | `[A]` tugmasi |
+| **Tez yugurish** | `Shift` yoki `Z` | `[B]` tugmasi |
+| **Olov otish (Fireball)**| `X` | `[B]` tugmasi |
+| **Yuzni almashtirish** | `C` | `👤 DIYORBEK` tugmasi |
+| **Ovozni yoqish/o'chirish** | `M` | `🔊 OVOZ` tugmasi |
 
 ---
 
-## 🚀 Ishga Tushirish (How to Run)
-
-Hech qanday qo'shimcha dastur o'rnatish shart emas!
-Oddiygina `index.html` faylini Google Chrome, Microsoft Edge, Opera yoki istalgan brauzerda oching va o'ynang!
-O'yin ma'lumotlari (`localStorage`) orqali kompyuteringizda avtomatik saqlanib boradi.
-
+## 🚀 Qanday O'ynash Mumkin:
+Kompyuterda `c:\Users\User\dota\index.html` faylini Google Chrome yoki istalgan brauzerda oching va o'ynang!
+Mobil telefon yoki planshetlarda ham sensorli tugmalar orqali to'liq ishlaydi.
